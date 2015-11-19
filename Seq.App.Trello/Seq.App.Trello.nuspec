@@ -19,9 +19,9 @@
   <files>
     <file src="..\README.md" target="tools" />
     <file src="..\LICENSE.md" target="tools" />
-	<file src="bin\Release\Seq.App.Trello.dll" target="lib\net451" />
-	<file src="bin\Release\Newtonsoft.Json.dll" target="lib\net451" />
-	<file src="bin\Release\RestSharp.dll" target="lib\net451" />
-	<file src="bin\Release\TrelloNet.dll" target="lib\net451" />
+	<file src="bin\Release\Seq.App.Trello.dll" target="lib\net45" />
+	<file src="bin\Release\Newtonsoft.Json.dll" target="lib\net45" />
+	<file src="bin\Release\RestSharp.dll" target="lib\net45" />
+	<file src="bin\Release\TrelloNet.dll" target="lib\net45" />
   </files>
 </package>
