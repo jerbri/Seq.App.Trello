@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using Seq.Apps;
 using Seq.Apps.LogEvents;
+using TrelloNet;
 
 namespace Seq.App.Trello
 {
-    [SeqApp("Trello",Description="Creates a Trello card out of the event details.")]
+    [SeqApp("Trello", Description = "Creates a Trello card out of the event details.")]
     public class TrelloReactor : Reactor, ISubscribeTo<LogEventData>
     {
 
@@ -19,11 +21,6 @@ namespace Seq.App.Trello
         public string TrelloApiSecret { get; set; }
 
         [SeqAppSetting(
-            DisplayName = "Organization Name",
-            HelpText = "Organization name that owns this API key")]
-        public string OrganizationName { get; set; }
-
-        [SeqAppSetting(
             DisplayName = "Board Name",
             HelpText = "Name of the board card will be added to.")]
         public string BoardName { get; set; }
@@ -32,20 +29,34 @@ namespace Seq.App.Trello
           DisplayName = "List Name",
           HelpText = "Name of the list card should be added to.")]
         public string ListName { get; set; }
+     
 
         public void On(Event<LogEventData> evt)
         {
+            try
+            {
+                ITrello trello = new TrelloNet.Trello(TrelloApiKey);
 
-            // connect
+                trello.Authorize(TrelloApiSecret);
 
-            // Find board id from name
+                var board = trello.Boards.Search(BoardName).FirstOrDefault();
+                if (board == null)
+                    throw new ArgumentException(string.Format("Could not find Trello board named '{0}'", BoardName));
 
-            // Find list id from name
+                var list =trello.Lists.ForBoard(board) .FirstOrDefault(x => x.Name.Equals(ListName, StringComparison.OrdinalIgnoreCase));
 
-            // create card
+                if (list == null)
+                    throw new ArgumentException(string.Format("Could not find Trello list named '{0}'", BoardName));
 
+                // TODO parse the details out better
+                trello.Cards.Add(new NewCard(evt.Data.RenderedMessage, list));
 
-            throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                Log.Warning("Failed to create new Trello card.", ex);
+            }
+
         }
 
     }
