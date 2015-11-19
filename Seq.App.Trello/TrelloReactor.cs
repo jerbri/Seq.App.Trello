@@ -19,6 +19,11 @@ namespace Seq.App.Trello
         public string TrelloApiSecret { get; set; }
 
         [SeqAppSetting(
+            DisplayName = "Organization Name",
+            HelpText = "Organization name that owns this API key")]
+        public string OrganizationName { get; set; }
+
+        [SeqAppSetting(
             DisplayName = "Board Name",
             HelpText = "Name of the board card will be added to.")]
         public string BoardName { get; set; }
@@ -30,6 +35,16 @@ namespace Seq.App.Trello
 
         public void On(Event<LogEventData> evt)
         {
+
+            // connect
+
+            // Find board id from name
+
+            // Find list id from name
+
+            // create card
+
+
             throw new NotImplementedException();
         }
 
